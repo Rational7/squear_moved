@@ -1,0 +1,64 @@
+var square = document.getElementById('cube');
+var interval;
+var position = 0;
+var direction = 1;
+
+square.onmousedown = function(e) {
+clearInterval(interval);
+  	var coords = getCoords(square);
+  	var shiftX = e.pageX - coords.left;
+  	var shiftY = e.pageY - coords.top;
+ 
+		square.style.position = 'absolute';
+		square.style.animation = false;
+		square.style.zIndex = 1000; 
+
+  
+document.onmousemove = function(e) {
+moveAt(e);
+  };
+    
+    function moveAt(e) {
+    position = e.pageX - shiftX;
+    square.style.left = position + 'px';
+   	square.style.top = e.pageY - shiftY + 'px';
+  	}
+
+    document.onmouseup = function() {
+    startAnimation();
+    document.onmousemove = null;
+    square.onmouseup = null;
+    };
+}
+
+square.ondragstart = function() {
+return false;
+};
+
+function getCoords(elem) {   
+		var box = elem.getBoundingClientRect();
+return  {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+}
+
+function startAnimation() {
+		var speed = 1;
+		interval = setInterval(moveCube, 5);
+  		
+function moveCube() {
+  	position += direction * speed;
+  	square.style.left = position + "px";
+
+			if (position >= (window.innerWidth - square.offsetWidth)) {
+				direction = -1;
+			}
+				
+			if (position <= 0) {
+				direction = 1;
+			}
+  }    
+}
+    
+startAnimation();
